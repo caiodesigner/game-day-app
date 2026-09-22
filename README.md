@@ -105,7 +105,9 @@ as três peças. Formatos e cores são aleatórios; repetições são permitidas
 
 `GameScreen` exibe o tabuleiro com `GridView.builder`, `DragTarget` nas células
 e `Draggable` no dock. A peça aumenta para a escala do tabuleiro ao arrastar;
-o dedo aponta para a primeira célula do retângulo da peça. A prévia fica verde
+a peça fica centralizada horizontalmente e inteiramente acima do dedo, com
+50 pontos lógicos de separação. A prévia e o encaixe seguem a posição visual
+da peça, não a posição do dedo. A prévia usa a cor da peça com 38% de opacidade
 quando cabe e vermelha quando não cabe. Soltar fora ou sobre uma posição inválida
 mantém a peça no dock. Apenas uma peça pode ser arrastada por vez.
 
@@ -141,6 +143,10 @@ um plugin nativo, encerre a execução anterior e execute `flutter run` novament
 apenas hot reload não instala o plugin Android.
 
 
+Os blocos são desenhados com facetas diagonais, bordas chanfradas e brilho no
+canto superior esquerdo, seguindo a estética de joia do ícone. O acabamento
+é vetorial e compartilhado entre tabuleiro, dock, prévia e arrasto.
+
 ## Efeitos e polimento — Fase 4
 
 As linhas eliminadas encolhem e desaparecem em 340 ms, mantendo as cores
@@ -169,6 +175,17 @@ o plugin de áudio precisa ser instalado no Android. No aparelho, confira:
 - Fechar/reabrir: o recorde permanece; a partida começa vazia.
 
 Os sons podem ser regenerados com `python3 scripts/generate_sounds.py`.
+
+## Ícone Android
+
+O ícone original em `assets/icon/block_puzzle.png` substitui o símbolo do Flutter,
+com variantes por densidade e ícone adaptativo. Para regenerar os recursos,
+execute `dart run flutter_launcher_icons`. O prompt e a origem da arte estão em
+[assets/icon/README.md](assets/icon/README.md).
+
+Mudanças de ícone exigem nova instalação pelo `flutter run` ou pelo APK;
+hot reload não altera os recursos do launcher. A atualização do mesmo app
+preserva o recorde salvo.
 
 ## Fontes de instalação
 

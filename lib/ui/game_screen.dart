@@ -8,6 +8,7 @@ import '../game/game_controller.dart';
 import '../game/piece.dart';
 import '../audio/game_audio.dart';
 import 'game_over_panel.dart';
+import 'jewel_painter.dart';
 
 const _palette = [
   Color(0xFF9A7BFF),
@@ -306,6 +307,8 @@ class _GameScreenState extends State<GameScreen>
                                           children: [
                                             JewelCell(
                                               colorId: cells[y][x],
+                                              previewColorId:
+                                                  preview?.entry.piece.colorId,
                                               preview:
                                                   highlighted.contains((
                                                     x: x,
@@ -421,6 +424,12 @@ class _GameScreenState extends State<GameScreen>
       return const Icon(Icons.check_rounded, color: Color(0xFF514B68));
     }
     final piece = PieceView(piece: entry.piece, cellSize: smallSize);
+    final width = entry.piece.cells.map((cell) => cell.x).reduce(max) + 1;
+    final height = entry.piece.cells.map((cell) => cell.y).reduce(max) + 1;
+    // Keep even the tallest piece fully above the finger, with a 50 dp gap.
+    final anchor = Offset(width * fullSize / 2, height * fullSize + 50);
+    // Hit-test the center of the visual top-left cell, not the finger itself.
+    final targetOffset = Offset(fullSize / 2, fullSize / 2) - anchor;
     return Draggable<DockPiece>(
       key: ObjectKey(entry),
       hitTestBehavior: HitTestBehavior.opaque,
@@ -428,8 +437,8 @@ class _GameScreenState extends State<GameScreen>
       maxSimultaneousDrags: game.dragging == null && !_effect.isAnimating
           ? 1
           : 0,
-      // The pointer anchors the center of the top-left grid cell at either scale.
-      dragAnchorStrategy: (_, _, _) => Offset(fullSize / 2, fullSize / 2),
+      dragAnchorStrategy: (_, _, _) => anchor,
+      feedbackOffset: targetOffset,
       onDragStarted: () => game.beginDrag(entry),
       onDragEnd: (_) {
         game.endDrag();
@@ -439,7 +448,11 @@ class _GameScreenState extends State<GameScreen>
         color: Colors.transparent,
         child: Opacity(
           opacity: .8,
-          child: PieceView(piece: entry.piece, cellSize: fullSize),
+          child: PieceView(
+            key: const ValueKey('drag-feedback'),
+            piece: entry.piece,
+            cellSize: fullSize,
+          ),
         ),
       ),
       childWhenDragging: Opacity(opacity: .18, child: piece),
@@ -457,35 +470,47 @@ class _GameScreenState extends State<GameScreen>
 }
 
 class JewelCell extends StatelessWidget {
-  const JewelCell({super.key, required this.colorId, this.preview});
+  const JewelCell({
+    super.key,
+    required this.colorId,
+    this.preview,
+    this.previewColorId,
+  });
   final int colorId;
   final bool? preview;
+  final int? previewColorId;
 
   @override
   Widget build(BuildContext context) {
-    final color = preview != null
-        ? (preview! ? const Color(0xFF72EBC5) : const Color(0xFFFF6C87))
-        : colorId == 0
-        ? const Color(0xFF19192D)
-        : _palette[(colorId - 1) % _palette.length];
-    return Container(
-      margin: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: color,
-        border: Border.all(
-          color: colorId == 0 && preview == null
-              ? const Color(0xFF2E2B44)
-              : Color.lerp(color, Colors.white, .4)!,
-          width: 1.5,
-        ),
-        gradient: colorId == 0 && preview == null
-            ? null
-            : LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [color, Color.lerp(color, Colors.black, .24)!],
+    final id = preview == true ? (previewColorId ?? colorId) : colorId;
+    final color = preview == false
+        ? const Color(0xFFE5230B)
+        : _palette[((id > 0 ? id : 1) - 1) % _palette.length];
+    return Padding(
+      padding: const EdgeInsets.all(2),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: const Color(0xFF19192D),
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: const Color(0xFF2E2B44)),
+            ),
+          ),
+          if (colorId != 0 || preview != null)
+            Opacity(
+              opacity: preview == true ? .38 : 1,
+              child: CustomPaint(painter: JewelPainter(color)),
+            ),
+          if (preview == false)
+            DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: const Color(0xFFFF3D00), width: 2.5),
               ),
+            ),
+        ],
       ),
     );
   }

@@ -25,11 +25,18 @@ void main() {
     int y,
   ) async {
     await tester.pumpAndSettle();
-    final start = tester.getCenter(find.byKey(ValueKey('dock-$slot')));
+    final dock = find.byKey(ValueKey('dock-$slot'));
+    final draggable = tester.widget<Draggable<DockPiece>>(
+      find.ancestor(of: dock, matching: find.byType(Draggable<DockPiece>)),
+    );
+    final start = tester.getCenter(dock);
     final gesture = await tester.startGesture(start);
     await gesture.moveBy(const Offset(0, -25));
     await tester.pump();
-    await gesture.moveTo(tester.getCenter(find.byKey(ValueKey('cell-$x-$y'))));
+    await gesture.moveTo(
+      tester.getCenter(find.byKey(ValueKey('cell-$x-$y'))) -
+          draggable.feedbackOffset,
+    );
     await tester.pump();
     return gesture;
   }
@@ -99,6 +106,45 @@ void main() {
     expect(game.score, 0);
     expect(tester.takeException(), isNull);
   });
+
+  for (final shape in [
+    Pieces.single,
+    Pieces.square3,
+    Pieces.verticalLines.last,
+    Pieces.j,
+  ]) {
+    testWidgets(
+      'raised ${shape.blockCount}-block piece stays above finger and matches drop preview',
+      (tester) async {
+        final game = await load(tester, piece: shape);
+        final dock = find.byKey(const ValueKey('dock-0'));
+        final draggable = tester.widget<Draggable<DockPiece>>(
+          find.ancestor(of: dock, matching: find.byType(Draggable<DockPiece>)),
+        );
+        final target = tester.getCenter(find.byKey(const ValueKey('cell-1-1')));
+        final finger = target - draggable.feedbackOffset;
+        final gesture = await dragTo(tester, 0, 1, 1);
+        final bounds = tester.getRect(
+          find.byKey(const ValueKey('drag-feedback')),
+        );
+        expect(finger.dy - bounds.bottom, closeTo(50, .01));
+        expect(bounds.center.dx, closeTo(finger.dx, .01));
+        final cellBounds = tester.getRect(
+          find.byKey(const ValueKey('cell-1-1')),
+        );
+        expect(bounds.topLeft.dx, closeTo(cellBounds.left, .01));
+        expect(bounds.topLeft.dy, closeTo(cellBounds.top, .01));
+        expect(game.score, 0);
+        await gesture.up();
+        await tester.pumpAndSettle();
+        expect(game.score, shape.blockCount);
+        for (final cell in shape.cells) {
+          expect(game.cells[1 + cell.y][1 + cell.x], isPositive);
+        }
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('restart clears a played board', (tester) async {
     final game = await load(tester);
