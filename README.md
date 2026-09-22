@@ -49,6 +49,43 @@ Saída ARM64: `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`.
 A assinatura de distribuição será configurada antes de publicar.
 Os downloads iniciais exigem internet; isso não altera o requisito de jogo offline.
 
+## Gerar APK com versão e data
+
+Na raiz do projeto, execute no Bash:
+
+```bash
+source scripts/env.sh
+
+APP_VERSION="1.0.0"
+APP_BUILD_NUMBER="1"
+APK_DATE="$(date +%d-%m-%y)"
+APK_DIR="build/app/outputs/flutter-apk"
+APK_NAME="bloc-puzzle-v-${APP_VERSION}-${APK_DATE}.apk"
+
+flutter build apk --release \
+  --build-name="$APP_VERSION" \
+  --build-number="$APP_BUILD_NUMBER" &&
+  cp "$APK_DIR/app-release.apk" "$APK_DIR/$APK_NAME"
+```
+
+Esse comando gera um APK universal para Android (ARM32, ARM64 e x86_64).
+`APP_VERSION` define a versão interna exibida pelo aplicativo; `APP_BUILD_NUMBER`
+define o código inteiro da versão no Android. Aumente o código a cada nova
+distribuição e ajuste a versão conforme a atualização. Esses parâmetros valem
+para essa compilação e não alteram a versão padrão do `pubspec.yaml`.
+
+A data usa o relógio local no formato `dd-mm-aa`. Por exemplo, a versão `1.0.0`
+gerada em 22/09/2026 fica em:
+
+```text
+build/app/outputs/flutter-apk/bloc-puzzle-v-1.0.0-22-09-26.apk
+```
+
+A cópia com nome personalizado só é feita se a compilação terminar com sucesso.
+Gerar novamente a mesma versão na mesma data substitui o arquivo anterior.
+O APK mantém a assinatura de desenvolvimento configurada no projeto; a assinatura
+para publicação na loja ainda precisa ser configurada.
+
 ## Etapas
 
 1. **Preparação:** Flutter, ferramentas Android, editor e validação de build.
