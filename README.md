@@ -14,6 +14,7 @@ source scripts/env.sh
 flutter doctor -v
 flutter pub get
 flutter analyze
+flutter test
 ```
 
 O Flutter fica em `.tools/flutter`; Dart vem junto com ele. Os caches Pub e
@@ -51,7 +52,7 @@ Os downloads iniciais exigem internet; isso não altera o requisito de jogo offl
 ## Etapas
 
 1. **Preparação:** Flutter, ferramentas Android, editor e validação de build.
-2. **Fase 1 — lógica:** `BoardLogic` em Dart puro; matriz 8×8; inserção válida e
+2. **Fase 1 — lógica (implementada):** `BoardLogic` em Dart puro; matriz 8×8; inserção válida e
    atômica; limpeza simultânea de linhas/colunas; pontuação e testes unitários.
 3. **Fase 2 — interação:** tabuleiro responsivo, dock com três peças,
    arrastar e soltar, prévia de encaixe e reposição por rodada.
@@ -62,8 +63,41 @@ Os downloads iniciais exigem internet; isso não altera o requisito de jogo offl
 
 Usaremos Provider para conectar estado e interface; a lógica do tabuleiro
 permanecerá independente de widgets. As dependências de jogo serão adicionadas
-nas respectivas fases. O primeiro incremento trata apenas da preparação.
-Os testes com `flutter test` serão introduzidos com a lógica da Fase 1.
+nas respectivas fases.
+
+## Lógica do jogo — Fase 1
+
+O código em `lib/game/` é Dart puro, sem dependências de widgets ou serviços.
+`Piece` contém offsets imutáveis e um ID de cor positivo. `Pieces` oferece
+15 formatos: quadrados 1×1, 2×2 e 3×3; linhas horizontais e verticais de 2 a 5;
+L, J, T e Z em orientações fixas. Geração de rodadas ficará para a Fase 2.
+
+```dart
+final board = BoardLogic();
+final fits = board.canPlace(Pieces.square2, x: 3, y: 2);
+final move = board.tryPlace(Pieces.square2, x: 3, y: 2);
+// move == null: posição inválida, sem alterar tabuleiro ou pontuação.
+// move != null: pontos e índices das linhas/colunas eliminadas.
+```
+
+Importe `package:block_puzzle/game/board_logic.dart` e
+`package:block_puzzle/game/piece.dart`. As coordenadas começam em zero:
+`x` é coluna, `y` é linha, e a matriz é acessada como `board.cells[y][x]`.
+O getter retorna uma cópia imutável; `0` representa vazio. `board.score` acumula
+os pontos e `board.reset()` inicia um tabuleiro vazio com pontuação zero.
+
+Cada bloco colocado vale 1 ponto. O bônus por `n` linhas/colunas no mesmo
+movimento é `10 × n × (n + 1) ÷ 2`: 10, 30, 60, 100… A fórmula generaliza
+os exemplos do plano. Uma linha e uma coluna cruzadas contam como duas linhas;
+ambas são detectadas antes da limpeza. Blocos restantes permanecem na posição,
+sem gravidade. A limpeza ocorre dentro de `tryPlace`, evitando pontuação dupla.
+
+Execute `flutter test --coverage` para validar as regras e gerar `coverage/lcov.info`.
+Os testes cobrem limites, sobreposição, encaixes com espaços vazios, cores,
+limpeza simultânea, combos, imutabilidade, catálogo e reinício.
+
+A tela do celular continua exibindo “Block Puzzle”: a interface jogável será
+implementada na Fase 2. Game over e persistência continuam previstos na Fase 3.
 
 ## Fontes de instalação
 
