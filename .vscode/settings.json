@@ -1,0 +1,19 @@
+{
+  "dart.flutterSdkPath": ".tools/flutter",
+  "dart.env": {
+    "PUB_CACHE": "${workspaceFolder}/.tools/pub-cache",
+    "GRADLE_USER_HOME": "${workspaceFolder}/.tools/gradle",
+    "ANDROID_HOME": "${env:HOME}/Android/Sdk",
+    "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
+  },
+  "terminal.integrated.env.linux": {
+    "PATH": "${workspaceFolder}/.tools/flutter/bin:${env:HOME}/Android/Sdk/cmdline-tools/latest/bin:${env:HOME}/Android/Sdk/platform-tools:${env:PATH}",
+    "PUB_CACHE": "${workspaceFolder}/.tools/pub-cache",
+    "GRADLE_USER_HOME": "${workspaceFolder}/.tools/gradle",
+    "ANDROID_HOME": "${env:HOME}/Android/Sdk",
+    "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
+  },
+  "files.watcherExclude": { "**/.tools/**": true, "**/build/**": true },
+  "search.exclude": { "**/.tools": true, "**/build": true },
+  "[dart]": { "editor.formatOnSave": true }
+}

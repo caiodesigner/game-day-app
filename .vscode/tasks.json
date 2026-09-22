@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Flutter: diagnóstico",
+      "type": "process",
+      "command": "${workspaceFolder}/.tools/flutter/bin/flutter",
+      "args": ["doctor", "-v"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: analisar",
+      "type": "process",
+      "command": "${workspaceFolder}/.tools/flutter/bin/flutter",
+      "args": ["analyze"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: APK debug ARM64",
+      "type": "process",
+      "command": "${workspaceFolder}/.tools/flutter/bin/flutter",
+      "args": ["build", "apk", "--debug", "--target-platform", "android-arm64"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    }
+  ],
+  "options": {
+    "cwd": "${workspaceFolder}",
+    "env": {
+      "ANDROID_HOME": "${env:HOME}/Android/Sdk",
+      "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64",
+      "PUB_CACHE": "${workspaceFolder}/.tools/pub-cache",
+      "GRADLE_USER_HOME": "${workspaceFolder}/.tools/gradle"
+    }
+  }
+}

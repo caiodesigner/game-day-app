@@ -1,0 +1,7 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "Block Puzzle (debug)", "request": "launch", "type": "dart", "program": "lib/main.dart" },
+    { "name": "Block Puzzle (release)", "request": "launch", "type": "dart", "program": "lib/main.dart", "flutterMode": "release" }
+  ]
+}
