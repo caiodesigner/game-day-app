@@ -54,15 +54,15 @@ Os downloads iniciais exigem internet; isso não altera o requisito de jogo offl
 1. **Preparação:** Flutter, ferramentas Android, editor e validação de build.
 2. **Fase 1 — lógica (implementada):** `BoardLogic` em Dart puro; matriz 8×8; inserção válida e
    atômica; limpeza simultânea de linhas/colunas; pontuação e testes unitários.
-3. **Fase 2 — interação:** tabuleiro responsivo, dock com três peças,
+3. **Fase 2 — interação (implementada):** tabuleiro responsivo, dock com três peças,
    arrastar e soltar, prévia de encaixe e reposição por rodada.
-4. **Fase 3 — estado e persistência:** detectar ausência de movimentos entre
+4. **Fase 3 — estado e persistência (implementada):** detectar ausência de movimentos entre
    todas as peças restantes; salvar recorde com `shared_preferences`.
-5. **Fase 4 — polimento:** animações, áudio local com `audioplayers`, reinício,
+5. **Fase 4 — polimento (implementada):** animações, áudio local com `audioplayers`, reinício,
    diálogo de game over e testes em celular.
 
-Usaremos Provider para conectar estado e interface; a lógica do tabuleiro
-permanecerá independente de widgets. As dependências de jogo serão adicionadas
+Provider conecta estado e interface; a lógica do tabuleiro
+permanece independente de widgets. As demais dependências de jogo serão adicionadas
 nas respectivas fases.
 
 ## Lógica do jogo — Fase 1
@@ -96,8 +96,79 @@ Execute `flutter test --coverage` para validar as regras e gerar `coverage/lcov.
 Os testes cobrem limites, sobreposição, encaixes com espaços vazios, cores,
 limpeza simultânea, combos, imutabilidade, catálogo e reinício.
 
-A tela do celular continua exibindo “Block Puzzle”: a interface jogável será
-implementada na Fase 2. Game over e persistência continuam previstos na Fase 3.
+## Interface e rodadas — Fase 2
+
+`GameController` gerencia a pontuação, as três posições do dock e a rodada via
+Provider. Cada peça tem identidade própria: jogadas repetidas ou dados de uma
+partida reiniciada são rejeitados. Uma nova rodada é gerada somente após usar
+as três peças. Formatos e cores são aleatórios; repetições são permitidas.
+
+`GameScreen` exibe o tabuleiro com `GridView.builder`, `DragTarget` nas células
+e `Draggable` no dock. A peça aumenta para a escala do tabuleiro ao arrastar;
+o dedo aponta para a primeira célula do retângulo da peça. A prévia fica verde
+quando cabe e vermelha quando não cabe. Soltar fora ou sobre uma posição inválida
+mantém a peça no dock. Apenas uma peça pode ser arrastada por vez.
+
+A pontuação atualiza após cada jogada, incluindo limpezas e combos. O botão
+de reinício limpa a partida e gera três novas peças. O layout adapta o tabuleiro
+à tela; em janelas baixas, a página permite rolagem.
+
+Os testes de widgets simulam arrastar e soltar, prévia, rejeição, reposição de
+rodada e reinício, além de verificar layouts de celular, paisagem e tablet.
+Para testar no celular, execute `source scripts/env.sh` e `flutter run`.
+
+## Game over e recorde — Fase 3
+
+Após cada jogada válida, incluindo a limpeza e a reposição do dock, o jogo
+verifica todas as posições para todas as peças restantes. Se nenhuma couber,
+a tela de fim de jogo mostra pontuação e recorde e oferece “Jogar novamente”.
+A partida encerrada bloqueia novas jogadas. Reiniciar preserva o recorde.
+
+O recorde é carregado e salvo localmente usando `SharedPreferencesAsync`, pela
+chave `block_puzzle.high_score`. Ele é atualizado durante a partida, sem esperar
+pelo game over. A gravação é sequencial para evitar que operações assíncronas
+antigas substituam um recorde maior. Falhas de armazenamento exibem um aviso,
+sem interromper a partida; a próxima jogada ou reinício tenta salvar novamente.
+Somente o recorde é persistido: ao reabrir o app, a partida começa do zero.
+
+Os testes incluem movimentos restantes, peças recém-geradas, espaços liberados
+por limpeza, carregamento tardio, falhas de armazenamento, reabertura simulada,
+integração com o backend de teste de SharedPreferences e a tela de fim de jogo.
+
+Para validar a persistência no aparelho, faça pontos, feche o app e abra novamente:
+a pontuação deve começar em zero, mantendo o recorde. Como esta fase adiciona
+um plugin nativo, encerre a execução anterior e execute `flutter run` novamente;
+apenas hot reload não instala o plugin Android.
+
+
+## Efeitos e polimento — Fase 4
+
+As linhas eliminadas encolhem e desaparecem em 340 ms, mantendo as cores
+originais inclusive nos cruzamentos. A interface mostra pontos da última jogada
+e o multiplicador de combo. Durante a transição, novos arrastos ficam bloqueados;
+as regras e a pontuação são aplicadas apenas uma vez.
+
+Os efeitos de encaixe, limpeza e fim de jogo usam arquivos WAV originais em
+`assets/audio/`, reproduzidos por `audioplayers`. O botão de volume silencia ou
+reativa os sons; a escolha permanece ao reiniciar partidas na mesma sessão
+(não é persistida ao fechar o app). O áudio para quando o app perde o foco e os
+recursos são liberados ao fechar a tela. Falhas de áudio não impedem jogar.
+
+O fim de jogo tem painel com pontuação, recorde e reinício rápido, e espera a
+animação da última jogada terminar. A preferência do sistema por redução de
+animações é respeitada. Os testes verificam animação, cores das linhas cruzadas,
+som por evento, silêncio, segundo plano, reinício e liberação dos recursos.
+
+Para testar os novos sons, encerre o `flutter run` anterior e execute-o novamente:
+o plugin de áudio precisa ser instalado no Android. No aparelho, confira:
+
+- Encaixe válido: som curto; tentativa inválida: sem som e sem perder a peça.
+- Limpeza: blocos desaparecem com animação e um toque ascendente.
+- Botão de volume: silencia inclusive o som de fim de jogo.
+- Fim de jogo: aparece uma única vez e permite reiniciar rapidamente.
+- Fechar/reabrir: o recorde permanece; a partida começa vazia.
+
+Os sons podem ser regenerados com `python3 scripts/generate_sounds.py`.
 
 ## Fontes de instalação
 

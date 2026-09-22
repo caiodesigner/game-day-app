@@ -62,3 +62,36 @@ Instale as [Command-line Tools oficiais](https://developer.android.com/studio#co
 no SDK Android e os pacotes indicados pelo template/diagnóstico, se ausentes.
 Consulte a [configuração Android do Flutter](https://docs.flutter.dev/platform-integration/android/setup).
 Este projeto preserva o plano original como referência.
+
+## Ajuste durante a Fase 3
+
+A importação automática de projetos Java/Gradle do VS Code foi desativada neste
+workspace (`java.import.gradle.enabled: false`, `gradle.autoDetect: off`). SDKs
+em `.tools/` e saídas em `build/` também foram excluídos da importação Java.
+Durante a validação, processos de importação do editor concorreram por memória
+com o build, esgotando RAM e swap. O Flutter continua executando o Gradle
+normalmente por `flutter run` e `flutter build apk`; o ajuste afeta a descoberta
+pelo editor, não a compilação Android.
+
+Após as interrupções do build, o Gradle foi reduzido para heap de 1 GB e um
+worker, com Kotlin compilando no mesmo processo (`in-process`), para limitar
+o consumo simultâneo de memória durante a compilação.
+
+Validação final da Fase 3: 40 testes passaram, `flutter analyze` sem problemas
+ e `flutter build apk --debug --target-platform android-arm64` concluído.
+O APK atualizado está em `build/app/outputs/flutter-apk/app-debug.apk`.
+Cinco daemons antigos de importação, identificados pelos logs como exclusivos
+ deste workspace, foram encerrados para liberar memória.
+
+## Validação da Fase 4
+
+- `flutter analyze`: sem problemas.
+- `flutter test`: 45 testes passaram.
+- `flutter build apk --split-per-abi`: concluído para armeabi-v7a (13,8 MB),
+  arm64-v8a (16,6 MB) e x86_64 (18,0 MB).
+- Os três WAV foram conferidos dentro do APK ARM64.
+- Manifesto de release conferido com `aapt`: sem permissão de internet.
+- CMake 3.22.1 instalado automaticamente pelo build dos componentes nativos.
+- Assinatura permanece a de desenvolvimento do template; publicação na loja
+  ainda exige identidade e chave de distribuição próprias.
+- Sons e sensação das animações no aparelho aguardam validação manual.

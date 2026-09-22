@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'game/game_controller.dart';
+import 'ui/game_screen.dart';
+import 'audio/game_audio.dart';
+import 'storage/high_score_store.dart';
 
 void main() {
   runApp(const BlockPuzzleApp());
@@ -18,7 +24,11 @@ class BlockPuzzleApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const Scaffold(body: Center(child: Text('Block Puzzle'))),
+      home: ChangeNotifierProvider(
+        create: (_) =>
+            GameController(highScoreStore: PreferencesHighScoreStore()),
+        child: GameScreen(audioFactory: LocalGameAudio.new),
+      ),
     );
   }
 }

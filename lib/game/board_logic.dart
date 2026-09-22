@@ -86,6 +86,18 @@ class BoardLogic {
     return result;
   }
 
+  /// Searches every anchor for every remaining piece, without changing state.
+  bool hasAnyMove(Iterable<Piece> pieces) {
+    for (final piece in pieces) {
+      for (var y = 0; y < size; y++) {
+        for (var x = 0; x < size; x++) {
+          if (canPlace(piece, x: x, y: y)) return true;
+        }
+      }
+    }
+    return false;
+  }
+
   void reset() {
     for (final row in _cells) {
       row.fillRange(0, size, 0);

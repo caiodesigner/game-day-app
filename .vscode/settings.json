@@ -13,7 +13,25 @@
     "ANDROID_HOME": "${env:HOME}/Android/Sdk",
     "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-amd64"
   },
-  "files.watcherExclude": { "**/.tools/**": true, "**/build/**": true },
-  "search.exclude": { "**/.tools": true, "**/build": true },
-  "[dart]": { "editor.formatOnSave": true }
+  "files.watcherExclude": {
+    "**/.tools/**": true,
+    "**/build/**": true
+  },
+  "search.exclude": {
+    "**/.tools": true,
+    "**/build": true
+  },
+  "[dart]": {
+    "editor.formatOnSave": true
+  },
+  "java.import.gradle.enabled": false,
+  "java.import.exclusions": [
+    "**/node_modules/**",
+    "**/.metadata/**",
+    "**/archetype-resources/**",
+    "**/META-INF/maven/**",
+    "**/.tools/**",
+    "**/build/**"
+  ],
+  "gradle.autoDetect": "off"
 }
