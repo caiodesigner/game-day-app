@@ -63,11 +63,11 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 24),
                 const Text(
-                  'GAME DAY',
+                  'GAME DAY APP',
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: 28,
                     fontWeight: FontWeight.w800,
-                    letterSpacing: 3,
+                    letterSpacing: 2,
                   ),
                 ),
                 const SizedBox(height: 12),

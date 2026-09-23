@@ -1,17 +1,19 @@
-# Block Puzzle launcher icon
+# Game Day App launcher icon
 
-Original artwork: `block_puzzle.png`, generated with the built-in imagegen tool.
-The source is kept here; Android density variants are generated with:
+Source artwork: `game_day.png`, generated with the built-in image_gen tool.
+A generic game controller represents the collection of games, using the app's
+violet, turquoise and amber palette on a dark navy background.
+
+Generate the Android density variants and adaptive icon with:
 
 ```bash
 source scripts/env.sh
 dart run flutter_launcher_icons
 ```
 
-`flutter_launcher_icons.yaml` configures legacy icons and adaptive icons.
-The adaptive foreground uses 16% inset to protect the jewel cluster when the
-launcher applies a circular or rounded mask. No Flutter logo remains.
+The adaptive foreground uses a 16% inset to keep the controller inside launcher
+masks. `block_puzzle.png` is the previous artwork, retained for reference only.
 
 ## Final generation prompt
 
-Use case: logo-brand. Create a finished square Android launcher icon for an original offline Block Puzzle game. A compact, distinctive interlocking cluster of exactly nine beveled square jewel tiles, arranged as a 3 by 3 grid with tiny even gaps, grouped by color into recognizable puzzle shapes: violet L on left, turquoise pair upper right, warm amber corner lower right. Bold clean readable silhouette, polished subtle facets, premium casual puzzle aesthetic matching dark navy #101021, violet #9A7BFF, turquoise #48D6D2 and amber #FFBA62. Full bleed flat dark navy background reaching all four edges, no outer icon frame and no rounded outer corners. Place the whole jewel cluster inside the central 58 percent of the square so Android circular adaptive masks never cut the tiles. Straight-on orthographic view, no perspective. Very crisp high contrast, modest highlights, elegant and simple at tiny size. No letters, no text, no numbers, no watermark, no Flutter logo, no extra ornaments. Output one 1024x1024 image. Save the generated image as a local file and provide the path so it can be installed in the project.
+Use case: logo-brand. Asset type: finished Android launcher icon for Game Day App, an offline collection of different casual games. Create one polished square 1024x1024 icon. Subject: a bold, friendly generic game controller symbol with a violet body, a clearly readable turquoise directional cross on the left and two warm amber circular buttons on the right. Premium casual game aesthetic with restrained beveled jewel-like highlights matching the existing app, strong simple silhouette, straight-on view. Background: full-bleed solid dark navy #101021 reaching all four edges. Palette: violet #9A7BFF, turquoise #48D6D2, amber #FFBA62. Keep the entire controller within the central 60 percent of the square, centered optically, with generous clean navy space around it for Android adaptive masks. No text, no letters, no watermark, no surrounding rounded-square frame, no puzzle tiles, no tiny decorative objects, no brand logos. This must be a production icon asset, not a phone mockup or presentation sheet. Save the output locally and provide the file path.

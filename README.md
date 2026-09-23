@@ -1,4 +1,4 @@
-# Game Day
+# Game Day App
 
 Aplicativo Android em Flutter com uma tela inicial para escolher entre os jogos
 disponíveis. O catálogo oferece Block Puzzle e Block Fall. No Block Puzzle: tabuleiro 8×8,
@@ -228,8 +228,9 @@ Os sons podem ser regenerados com `python3 scripts/generate_sounds.py`.
 
 ## Ícone Android
 
-O ícone original em `assets/icon/block_puzzle.png` substitui o símbolo do Flutter,
-com variantes por densidade e ícone adaptativo. Para regenerar os recursos,
+O ícone em `assets/icon/game_day.png` representa a coleção de jogos com um
+controle de videogame, com variantes por densidade e ícone adaptativo.
+O nome exibido no launcher Android é **Game Day App**. Para regenerar os recursos,
 execute `dart run flutter_launcher_icons`. O prompt e a origem da arte estão em
 [assets/icon/README.md](assets/icon/README.md).
 

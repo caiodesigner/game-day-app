@@ -1,8 +1,8 @@
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: assets/icon/block_puzzle.png
+  image_path: assets/icon/game_day.png
   adaptive_icon_background: '#101021'
-  adaptive_icon_foreground: assets/icon/block_puzzle.png
+  adaptive_icon_foreground: assets/icon/game_day.png
   adaptive_icon_foreground_inset: 16
   min_sdk_android: 24
