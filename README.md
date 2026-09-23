@@ -1,7 +1,7 @@
 # Game Day App
 
 Aplicativo Android em Flutter com uma tela inicial para escolher entre os jogos
-disponíveis. O catálogo oferece Block Puzzle e Block Fall. No Block Puzzle: tabuleiro 8×8,
+disponíveis. O catálogo oferece Block Puzzle, Block Fall e Snake. No Block Puzzle: tabuleiro 8×8,
 três peças por rodada, pontuação e recorde local. O jogo será offline, sem login,
 anúncios ou WebView. O plano original está em
 [plano_de_desenvolvimento_block_puzzle_game.md](plano_de_desenvolvimento_block_puzzle_game.md).
@@ -271,3 +271,22 @@ Pausar ou colocar o app em segundo plano interrompe a queda; após uma
 interrupção, toque em Continuar. Voltar ao catálogo encerra a partida e libera
 o temporizador e o áudio. Os jogos compartilham os blocos com efeito de joia,
 a paleta de cores, os sons, a fórmula de bônus e a tela de fim de jogo.
+
+
+## Snake
+
+O jogo da cobrinha usa um tabuleiro 12×12 e começa com três segmentos. Toque em
+Começar para iniciar. Use o direcional grande, deslize sobre o tabuleiro ou use
+as setas do teclado. Espaço inicia/pausa e P pausa. A cabeça é turquesa com
+olhos, o corpo violeta e a comida âmbar, seguindo o visual de joias do app.
+
+Cada comida aumenta a cobrinha em um segmento e vale 10 pontos. O nível sobe
+a cada 500 pontos e reduz o intervalo de movimento em 15% (300 ms no nível 1,
+com limite mínimo de 85 ms). Bater na parede ou no corpo encerra a partida;
+preencher todo o tabuleiro resulta em vitória. Não é possível inverter a
+direção diretamente; apenas uma mudança de direção é aceita por movimento.
+
+A comida sempre aparece em uma célula livre. Pausa, interrupções do sistema e
+retorno ao catálogo param o temporizador. Ao voltar de uma interrupção, toque
+em Continuar. Reiniciar volta à tela de preparação, preservando o recorde,
+salvo separadamente em `snake.high_score`.

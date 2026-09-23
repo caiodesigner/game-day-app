@@ -13,6 +13,7 @@ class PreferencesHighScoreStore implements HighScoreStore {
 
   static const key = 'block_puzzle.high_score';
   static const fallingKey = 'falling_blocks.high_score';
+  static const snakeKey = 'snake.high_score';
   final String storageKey;
   final SharedPreferencesAsync _preferences;
 

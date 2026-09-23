@@ -9,7 +9,9 @@ class GameOverPanel extends StatelessWidget {
     required this.onRestart,
     required this.soundButton,
     this.message = 'Nenhuma das peças restantes cabe no tabuleiro.',
+    this.title = 'Fim de jogo',
   });
+  final String title;
   final String message;
   final int score;
   final int record;
@@ -45,10 +47,10 @@ class GameOverPanel extends StatelessWidget {
                 size: 48,
                 color: Color(0xFFFFBA62),
               ),
-              title: const Text(
-                'Fim de jogo',
+              title: Text(
+                title,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.w800),
+                style: const TextStyle(fontWeight: FontWeight.w800),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,

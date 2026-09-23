@@ -28,9 +28,19 @@ void main() {
     final falling = PreferencesHighScoreStore(
       storageKey: PreferencesHighScoreStore.fallingKey,
     );
+    final snake = PreferencesHighScoreStore(
+      storageKey: PreferencesHighScoreStore.snakeKey,
+    );
+    await snake.write(70);
     await puzzle.write(500);
     await falling.write(120);
     expect(await PreferencesHighScoreStore().read(), 500);
+    expect(
+      await PreferencesHighScoreStore(
+        storageKey: PreferencesHighScoreStore.snakeKey,
+      ).read(),
+      70,
+    );
     expect(
       await PreferencesHighScoreStore(
         storageKey: PreferencesHighScoreStore.fallingKey,

@@ -6,6 +6,8 @@ import '../game/game_controller.dart';
 import '../storage/high_score_store.dart';
 import 'game_screen.dart';
 import 'falling_game_screen.dart';
+import 'snake_game_screen.dart';
+import '../game/snake/snake_controller.dart';
 import '../game/falling/falling_controller.dart';
 
 /// Each game owns its controller and resources within its route.
@@ -43,6 +45,21 @@ final _games =
             ),
           ),
           child: FallingGameScreen(audioFactory: LocalGameAudio.new),
+        ),
+      ),
+      (
+        id: 'snake',
+        title: 'Snake',
+        description:
+            'O clássico jogo da cobrinha: coma, cresça e evite os obstáculos.',
+        icon: Icons.gesture_rounded,
+        builder: (_) => ChangeNotifierProvider(
+          create: (_) => SnakeController(
+            highScoreStore: PreferencesHighScoreStore(
+              storageKey: PreferencesHighScoreStore.snakeKey,
+            ),
+          ),
+          child: SnakeGameScreen(audioFactory: LocalGameAudio.new),
         ),
       ),
     ];
