@@ -172,6 +172,12 @@ class _GameScreenState extends State<GameScreen>
                       children: [
                         Row(
                           children: [
+                            if (Navigator.of(context).canPop())
+                              IconButton(
+                                tooltip: 'Voltar aos jogos',
+                                icon: const Icon(Icons.arrow_back_rounded),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
                             const Expanded(
                               child: Text(
                                 'BLOCK PUZZLE',

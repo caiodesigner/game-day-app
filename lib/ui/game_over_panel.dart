@@ -80,6 +80,12 @@ class GameOverPanel extends StatelessWidget {
               ),
               actionsAlignment: MainAxisAlignment.center,
               actions: [
+                if (Navigator.of(context).canPop())
+                  TextButton.icon(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.home_rounded),
+                    label: const Text('Voltar aos jogos'),
+                  ),
                 soundButton,
                 FilledButton.icon(
                   onPressed: onRestart,

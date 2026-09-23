@@ -1,9 +1,16 @@
-# Block Puzzle
+# Game Day
 
-Aplicativo Android em Flutter, inspirado no gênero Block Puzzle: tabuleiro 8×8,
+Aplicativo Android em Flutter com uma tela inicial para escolher entre os jogos
+disponíveis. Por enquanto, o catálogo oferece o Block Puzzle: tabuleiro 8×8,
 três peças por rodada, pontuação e recorde local. O jogo será offline, sem login,
 anúncios ou WebView. O plano original está em
 [plano_de_desenvolvimento_block_puzzle_game.md](plano_de_desenvolvimento_block_puzzle_game.md).
+
+Ao abrir o app, toque no cartão Block Puzzle para iniciar uma partida. O botão
+“Voltar aos jogos” e o botão voltar do sistema retornam ao catálogo, encerrando
+a partida atual. Ao entrar novamente, uma nova partida começa; o recorde local
+é preservado. Novos jogos podem ser adicionados ao catálogo em
+`lib/ui/home_screen.dart`, cada um com sua própria rota e seus recursos.
 
 ## Ambiente de desenvolvimento
 
