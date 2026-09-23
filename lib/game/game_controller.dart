@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 import 'board_logic.dart';
+import 'difficulty.dart';
 import 'piece.dart';
 import '../storage/high_score_store.dart';
 
@@ -97,6 +98,7 @@ class GameController extends ChangeNotifier {
 
   List<List<int>> get cells => _board.cells;
   int get score => _board.score;
+  int get difficultyLevel => Difficulty.levelForScore(score);
   int get round => _round;
   List<DockPiece?> get dock => List.unmodifiable(_dock);
   DockPiece? get dragging => _dragging;
@@ -104,7 +106,7 @@ class GameController extends ChangeNotifier {
   void _refill() {
     for (var i = 0; i < 3; i++) {
       final shape =
-          nextPiece?.call() ?? Pieces.all[_random.nextInt(Pieces.all.length)];
+          nextPiece?.call() ?? Difficulty.pick(_random, difficultyLevel);
       _dock[i] = DockPiece(Piece(shape.cells, colorId: 1 + _random.nextInt(5)));
     }
   }

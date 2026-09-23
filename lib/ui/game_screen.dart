@@ -239,6 +239,13 @@ class _GameScreenState extends State<GameScreen>
                                     color: Color(0xFFA9A6C3),
                                   ),
                                 ),
+                                Text(
+                                  'Nível ${game.difficultyLevel}',
+                                  key: const ValueKey('difficulty-level'),
+                                  style: const TextStyle(
+                                    color: Color(0xFFA9A6C3),
+                                  ),
+                                ),
                               ],
                             ),
                           ],

@@ -41,6 +41,23 @@ void main() {
     return gesture;
   }
 
+  testWidgets('shows difficulty changes and resets the displayed level', (
+    tester,
+  ) async {
+    final game = await load(tester);
+      expect(find.text('Nível 1'), findsOneWidget);
+    var move = 0;
+    while (game.score < 500) {
+      game.place(game.dock.whereType<DockPiece>().first, move % 8, 0);
+      move++;
+    }
+    await tester.pumpAndSettle();
+      expect(find.text('Nível 2'), findsOneWidget);
+    game.reset();
+    await tester.pumpAndSettle();
+      expect(find.text('Nível 1'), findsOneWidget);
+  });
+
   testWidgets('previews then places, scores, consumes and refills the dock', (
     tester,
   ) async {

@@ -140,6 +140,12 @@ Provider. Cada peça tem identidade própria: jogadas repetidas ou dados de uma
 partida reiniciada são rejeitados. Uma nova rodada é gerada somente após usar
 as três peças. Formatos e cores são aleatórios; repetições são permitidas.
 
+A dificuldade começa no nível 1 e aumenta a cada 500 pontos: nível 2 aos
+500, nível 3 aos 1.000 e assim por diante. Cada nível aumenta a chance de
+sortear peças maiores nas próximas rodadas, mantendo todos os formatos
+disponíveis e preservando as peças já entregues. O nível aparece ao lado da
+rodada e volta a 1 ao reiniciar a partida.
+
 `GameScreen` exibe o tabuleiro com `GridView.builder`, `DragTarget` nas células
 e `Draggable` no dock. A peça aumenta para a escala do tabuleiro ao arrastar;
 a peça fica centralizada horizontalmente e inteiramente acima do dedo, com
