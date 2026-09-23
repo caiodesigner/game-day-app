@@ -23,6 +23,22 @@ void main() {
     );
   });
 
+  test('game records are isolated across preferences instances', () async {
+    final puzzle = PreferencesHighScoreStore();
+    final falling = PreferencesHighScoreStore(
+      storageKey: PreferencesHighScoreStore.fallingKey,
+    );
+    await puzzle.write(500);
+    await falling.write(120);
+    expect(await PreferencesHighScoreStore().read(), 500);
+    expect(
+      await PreferencesHighScoreStore(
+        storageKey: PreferencesHighScoreStore.fallingKey,
+      ).read(),
+      120,
+    );
+  });
+
   test('invalid negative stored record is treated as zero', () async {
     await SharedPreferencesAsync().setInt(PreferencesHighScoreStore.key, -10);
     expect(await PreferencesHighScoreStore().read(), 0);

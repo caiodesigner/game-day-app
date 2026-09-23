@@ -5,6 +5,8 @@ import '../audio/game_audio.dart';
 import '../game/game_controller.dart';
 import '../storage/high_score_store.dart';
 import 'game_screen.dart';
+import 'falling_game_screen.dart';
+import '../game/falling/falling_controller.dart';
 
 /// Each game owns its controller and resources within its route.
 final _games =
@@ -26,6 +28,21 @@ final _games =
           create: (_) =>
               GameController(highScoreStore: PreferencesHighScoreStore()),
           child: GameScreen(audioFactory: LocalGameAudio.new),
+        ),
+      ),
+      (
+        id: 'block-fall',
+        title: 'Block Fall',
+        description:
+            'Gire as peças em queda, complete linhas e desafie a velocidade.',
+        icon: Icons.view_comfy_rounded,
+        builder: (_) => ChangeNotifierProvider(
+          create: (_) => FallingController(
+            highScoreStore: PreferencesHighScoreStore(
+              storageKey: PreferencesHighScoreStore.fallingKey,
+            ),
+          ),
+          child: FallingGameScreen(audioFactory: LocalGameAudio.new),
         ),
       ),
     ];

@@ -27,7 +27,12 @@ void main() {
       expect(find.text('Block Puzzle'), findsOneWidget);
       expect(find.byType(GameScreen), findsNothing);
 
-      await tester.tap(find.text('Jogar'));
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const ValueKey('game-block-puzzle')),
+          matching: find.text('Jogar'),
+        ),
+      );
       await tester.pumpAndSettle();
       final first = tester
           .element(find.byType(GameScreen))
@@ -42,7 +47,12 @@ void main() {
       expect(find.byType(HomeScreen), findsOneWidget);
       expect(find.byType(GameScreen), findsNothing);
 
-      await tester.tap(find.text('Jogar'));
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const ValueKey('game-block-puzzle')),
+          matching: find.text('Jogar'),
+        ),
+      );
       await tester.pumpAndSettle();
       final second = tester
           .element(find.byType(GameScreen))
@@ -90,9 +100,19 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(const GameDayApp());
       expect(tester.takeException(), isNull);
-      await tester.ensureVisible(find.text('Jogar'));
+      await tester.ensureVisible(
+        find.descendant(
+          of: find.byKey(const ValueKey('game-block-puzzle')),
+          matching: find.text('Jogar'),
+        ),
+      );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Jogar'));
+      await tester.tap(
+        find.descendant(
+          of: find.byKey(const ValueKey('game-block-puzzle')),
+          matching: find.text('Jogar'),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.byType(GameScreen), findsOneWidget);
       expect(tester.takeException(), isNull);

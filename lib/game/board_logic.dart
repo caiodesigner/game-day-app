@@ -1,4 +1,5 @@
 import 'piece.dart';
+import 'scoring.dart';
 
 /// Successful move details, including lines before they were cleared.
 class PlacementResult {
@@ -16,7 +17,7 @@ class PlacementResult {
   int get clearedLineCount => clearedRows.length + clearedColumns.length;
 
   /// Triangular bonus: 1 line = 10, 2 = 30, 3 = 60, 4 = 100, etc.
-  int get clearPoints => 10 * clearedLineCount * (clearedLineCount + 1) ~/ 2;
+  int get clearPoints => lineClearPoints(clearedLineCount);
   int get points => placementPoints + clearPoints;
 }
 

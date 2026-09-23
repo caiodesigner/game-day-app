@@ -8,7 +8,9 @@ class GameOverPanel extends StatelessWidget {
     required this.storageError,
     required this.onRestart,
     required this.soundButton,
+    this.message = 'Nenhuma das peças restantes cabe no tabuleiro.',
   });
+  final String message;
   final int score;
   final int record;
   final bool storageError;
@@ -51,10 +53,7 @@ class GameOverPanel extends StatelessWidget {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'Nenhuma das peças restantes cabe no tabuleiro.',
-                    textAlign: TextAlign.center,
-                  ),
+                  Text(message, textAlign: TextAlign.center),
                   const SizedBox(height: 24),
                   Text(
                     'Pontuação: $score',
@@ -78,19 +77,47 @@ class GameOverPanel extends StatelessWidget {
                     ),
                 ],
               ),
-              actionsAlignment: MainAxisAlignment.center,
+              actionsPadding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
               actions: [
-                if (Navigator.of(context).canPop())
-                  TextButton.icon(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.home_rounded),
-                    label: const Text('Voltar aos jogos'),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      FilledButton.icon(
+                        style: FilledButton.styleFrom(
+                          minimumSize: const Size(0, 52),
+                        ),
+                        onPressed: onRestart,
+                        icon: const Icon(Icons.replay_rounded),
+                        label: const Text('Jogar novamente'),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (Navigator.of(context).canPop()) ...[
+                            Expanded(
+                              child: TextButton.icon(
+                                style: TextButton.styleFrom(
+                                  minimumSize: const Size(0, 48),
+                                ),
+                                onPressed: () => Navigator.of(context).pop(),
+                                icon: const Icon(Icons.home_rounded, size: 20),
+                                label: const Text(
+                                  'Voltar aos jogos',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          SizedBox(width: 48, height: 48, child: soundButton),
+                        ],
+                      ),
+                    ],
                   ),
-                soundButton,
-                FilledButton.icon(
-                  onPressed: onRestart,
-                  icon: const Icon(Icons.replay_rounded),
-                  label: const Text('Jogar novamente'),
                 ),
               ],
             ),

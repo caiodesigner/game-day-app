@@ -6,18 +6,22 @@ abstract interface class HighScoreStore {
 }
 
 class PreferencesHighScoreStore implements HighScoreStore {
-  PreferencesHighScoreStore({SharedPreferencesAsync? preferences})
-    : _preferences = preferences ?? SharedPreferencesAsync();
+  PreferencesHighScoreStore({
+    SharedPreferencesAsync? preferences,
+    this.storageKey = key,
+  }) : _preferences = preferences ?? SharedPreferencesAsync();
 
   static const key = 'block_puzzle.high_score';
+  static const fallingKey = 'falling_blocks.high_score';
+  final String storageKey;
   final SharedPreferencesAsync _preferences;
 
   @override
   Future<int> read() async {
-    final value = await _preferences.getInt(key) ?? 0;
+    final value = await _preferences.getInt(storageKey) ?? 0;
     return value < 0 ? 0 : value;
   }
 
   @override
-  Future<void> write(int score) => _preferences.setInt(key, score);
+  Future<void> write(int score) => _preferences.setInt(storageKey, score);
 }

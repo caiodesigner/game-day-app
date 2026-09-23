@@ -1,12 +1,12 @@
 # Game Day
 
 Aplicativo Android em Flutter com uma tela inicial para escolher entre os jogos
-disponíveis. Por enquanto, o catálogo oferece o Block Puzzle: tabuleiro 8×8,
+disponíveis. O catálogo oferece Block Puzzle e Block Fall. No Block Puzzle: tabuleiro 8×8,
 três peças por rodada, pontuação e recorde local. O jogo será offline, sem login,
 anúncios ou WebView. O plano original está em
 [plano_de_desenvolvimento_block_puzzle_game.md](plano_de_desenvolvimento_block_puzzle_game.md).
 
-Ao abrir o app, toque no cartão Block Puzzle para iniciar uma partida. O botão
+Ao abrir o app, toque no cartão do jogo desejado para iniciar uma partida. O botão
 “Voltar aos jogos” e o botão voltar do sistema retornam ao catálogo, encerrando
 a partida atual. Ao entrar novamente, uma nova partida começa; o recorde local
 é preservado. Novos jogos podem ser adicionados ao catálogo em
@@ -247,3 +247,26 @@ preserva o recorde salvo.
 As referências a JDK 17 e Android 34 no plano são a configuração proposta
 originalmente. A configuração efetiva será validada com o template do Flutter
 instalado e registrada em `docs/ambiente.md`.
+
+
+## Block Fall
+
+Variação com peças em queda no tabuleiro 8×16. Os sete formatos de quatro
+blocos são sorteados em grupos embaralhados, com uma prévia da próxima peça e
+uma sombra indicando o ponto de encaixe. Use os botões para mover, girar,
+descer um passo ou soltar a peça imediatamente. No teclado: setas esquerda e
+direita movem, seta para cima gira, seta para baixo desce, espaço solta e P pausa.
+A rotação tenta pequenos deslocamentos horizontais quando há uma parede.
+
+Somente linhas horizontais completas desaparecem; as linhas acima descem.
+Cada peça fixada vale 4 pontos, mais o mesmo bônus do Block Puzzle:
+`10 × n × (n + 1) ÷ 2` pelas linhas removidas no movimento. Mover, girar e
+acelerar a queda não dão pontos adicionais. O nível aumenta a cada 500 pontos,
+reduzindo em 15% o intervalo de queda (inicialmente 800 ms, mínimo 90 ms).
+A partida termina quando não há espaço para a próxima peça no topo.
+
+O recorde do Block Fall é salvo separadamente em `falling_blocks.high_score`.
+Pausar ou colocar o app em segundo plano interrompe a queda; após uma
+interrupção, toque em Continuar. Voltar ao catálogo encerra a partida e libera
+o temporizador e o áudio. Os jogos compartilham os blocos com efeito de joia,
+a paleta de cores, os sons, a fórmula de bônus e a tela de fim de jogo.
